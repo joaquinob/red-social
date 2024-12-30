@@ -7,4 +7,8 @@ const router = express.Router();
 // Crear cuenta
 router.post('/signup', userController.register);
 
-// 
+// Inicio de sesión
+router.post('/login', userController.login);
+
+// Cerrar sesion
+router.get('/logout', userController.logout);
