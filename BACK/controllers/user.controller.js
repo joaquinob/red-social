@@ -6,7 +6,7 @@ const JWT_EXPIRES_IN = '90d';
 
 const userController = {
 
-    register: async (req, res) => {
+    signup: async (req, res) => {
         try{
             const{
                 username,
@@ -20,9 +20,15 @@ const userController = {
             });
 
             await newUser.save();
-            res.status(201).send({message: 'Usuario registrado con éxito', userId: newUser._id });
+            res.status(201).send({
+                message: 'Usuario registrado con éxito', 
+                userId: newUser._id 
+            });
         } catch (error) {
-            res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
+            res.status(500).json({ 
+                message: 'Error al registrar el usuario',
+                error: error.message 
+            });
         }
     },
 
@@ -36,7 +42,9 @@ const userController = {
             const user = await User.findOne({ email });
 
             if(!user){
-                return res.status(404).json({message: 'Usuario no encontrado'})
+                return res.status(404).json({
+                    message: 'Usuario no encontrado'
+                })
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
@@ -45,11 +53,22 @@ const userController = {
                 return res.status(401).json({ message: 'Contraseña incorrecta' })
             }
 
-            const token = jwt.sign({ userId: user._id}, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-            res.status(200).json({ message: 'Login Exitoso', token, id: user._id, username: user.username, email: user.email})
+            const token = jwt.sign(
+                { userId: user._id}, 
+                JWT_SECRET, 
+                { expiresIn: JWT_EXPIRES_IN }
+            );
+            res.status(200).json({
+                message: 'Login Exitoso', 
+                token, id: user._id, 
+                username: user.username, 
+                email: user.email})
         }
         catch(error){
-            res.status(500).json({ message: 'Error en el login', error: error.message })
+            res.status(500).json({ 
+                message: 'Error en el login',
+                error: error.message 
+            })
         }
     },
 
@@ -60,12 +79,22 @@ const userController = {
             const updatedUser = await User.findByIdAndUpdate(userId, {name, email}, {new: true});
 
             if(!updatedUser){
-                return res.status(404).json({ message: 'Usuario no encontrado'})
+                return res.status(404).json({ 
+                    message: 'Usuario no encontrado'
+                })
             }
-            res.status(200).json({ message: 'Update Exitoso', user: updatedUser })
+            res.status(200).json({ 
+                message: 'Update Exitoso', 
+                user: updatedUser 
+            })
         }
         catch(error){
-            res.status(500).json({ message: 'Error en el update del usuario', error: error.message })
+            res.status(500).json({ 
+                message: 'Error en el update del usuario', 
+                error: error.message 
+            })
         }
     }
-}
+};
+
+module.exports = userController;
