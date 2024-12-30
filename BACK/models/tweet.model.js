@@ -8,7 +8,7 @@ const tweetSchema = new mongoose.Schema({
     },
     text: {
         type: String,
-        maxlength: 300
+        maxlength: 480
     },
     img:{
         type: Image
